@@ -41,6 +41,17 @@ const mutations = {
     //取消置顶消息 待完成
     cancelMsgStick(state, mid) {
 
-    }
+    },
+    update_rooms(state,msg){
+        console.log("调用mutations方法更新baseMsg数据")
+        state.msgList.baseMsg = msg
+        console.log(state.msgList)
+    },
+    add_opened_ws(state,mid){
+        console.log("更新is_opened_array")
+        state.is_opened_array = state.is_opened_array.concat([mid.toString()])
+        console.log(state.is_opened_array)
+    },
+
 }
 export default mutations

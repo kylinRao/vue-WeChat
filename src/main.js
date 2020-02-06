@@ -1,3 +1,7 @@
+import $ from 'jquery'
+import ReconnectingWebSocket from './socket/js/reconnecting-websocket.min.js'
+
+
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
@@ -5,6 +9,7 @@ import vuex from 'vue'
 import App from './App'
 import router from './router'
 import store from './vuex/store'
+// import chat from './socket/chat'
 import FastClick from 'fastclick' //使用 fastclick 解决移动端 300ms 点击延迟
 import filters from './filters' //将全部过滤器放在 filters/index.js 中便于管理
 //技巧 同时 use 多个插件 被依赖的插件应放在偏后方
@@ -13,7 +18,7 @@ Vue.use(VueAxios, axios, vuex)
 filters(Vue)
 
 Vue.config.productionTip = false //将此值设置为 false ,会关闭 Vue 启动时的提示信息，推荐
-
+Vue.prototype.ReconnectingWebSocket = ReconnectingWebSocket
 FastClick.attach(document.body)
 
 new Vue({

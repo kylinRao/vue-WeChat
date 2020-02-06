@@ -1,3 +1,4 @@
+import contact from './contacts' //存放所有联系人的数据
 const getters = {
 
     //  从联系人中提取出首字母 再排序 
@@ -15,7 +16,9 @@ const getters = {
     },
 
     // 将联系人根据首字母进行分类
-    contactsList: (state, getters) => {
+    contactsList:  (state,getters)  => {
+
+        
         var contactsList = {},
             allContacts = state.allContacts,
             max = allContacts.length;
@@ -29,7 +32,47 @@ const getters = {
             }
         }
         return contactsList
-    }
+    },
+    //  根据入口用户名，查询对应的用户信息
+
+    get_user_list: function(state){
+
+        return function(user_list) {
+
+        var user_info_list = []
+            
+        for (var i = 0; i < user_list.length; i++){
+            user_info_list = user_info_list.concat([contact.getUserInfo(user_list[i])])
+        }
+        // console.log("打印获取到的个人信息")
+        // console.log(user_info_list)
+
+        return user_info_list
+          }
+
+        // var user_info_list = [],
+            
+        // for (var i = 0; i < user_list.length; i++){
+        //     user_info_list = user_info_list + [contact.getUserInfo(user_list[i])]
+        // }
+
+        // return user_info_list.sort()
+    },
+    //  根据入口用户名，查询对应的用户信息
+
+    get_user_info: function(state){
+
+        return function(user_name) {
+
+        var user_info = contact.getUserInfo(user_name)
+        // console.log("打印获取到的个人信息")
+        // console.log(user_info)
+
+        return user_info
+          }
+    },
+
+
 }
 
 export default getters

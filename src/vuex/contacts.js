@@ -13,12 +13,12 @@
  * desc-描述
  */
 const contacts = [{ //昵称备注都有的朋友
-        "wxid": "wxid_zhaohd",
+        "wxid": "康康",
         "initial": 'z',
         "headerUrl": "https://sinacloud.net/vue-wechat/images/headers/header01.png",
-        "nickname": "阿荡",
+        "nickname": "康康",
         "sex": 1,
-        "remark": "阿荡",
+        "remark": "康康",
         "signature": "填坑小能手",
         "telphone": 18896586152,
         "album": [{
@@ -32,10 +32,10 @@ const contacts = [{ //昵称备注都有的朋友
         }
     },
     {
-        "wxid": "wxid_baiqian",
+        "wxid": "玛丽亚",
         "initial": 'b',
         "headerUrl": "https://sinacloud.net/vue-wechat/images/headers/baiqian.jpg",
-        "nickname": "白浅",
+        "nickname": "玛丽亚",
         "sex": 0,
         "remark": "",
         "signature": "青丘女帝，天族天妃",
@@ -55,12 +55,12 @@ const contacts = [{ //昵称备注都有的朋友
             "picUrl": ""
         }
     }, { //昵称备注都有的朋友
-        "wxid": "wxid_yehua",
+        "wxid": "李雷",
         "initial": 'y',
         "headerUrl": "https://sinacloud.net/vue-wechat/images/headers/yehua.jpg",
-        "nickname": "夜华",
+        "nickname": "李雷",
         "sex": 1,
-        "remark": "夜华",
+        "remark": "李雷",
         "signature": "浅浅，过来",
         "telphone": 18896586152,
         "album": [{
@@ -79,12 +79,12 @@ const contacts = [{ //昵称备注都有的朋友
         }
     },
     {
-        "wxid": "wxid_liubei",
+        "wxid": "韩梅梅",
         "initial": 'l',
         "headerUrl": "https://sinacloud.net/vue-wechat/images/headers/liubei.jpg",
-        "nickname": "刘备",
+        "nickname": "韩梅梅",
         "sex": 1,
-        "remark": "刘备",
+        "remark": "韩梅梅",
         "signature": "惟贤惟德，仁服于人",
         "telphone": 18896586152,
         "album": [{
@@ -244,6 +244,8 @@ contact.getUserInfo = function(wxid) {
     } else {
         for (var index in contacts) {
             if (contacts[index].wxid === wxid) {
+                // console.log("返回一个用户信息")
+                // console.log(contacts[index])
                 return contacts[index]
             }
         }

@@ -23,8 +23,8 @@
                         <div class="weui-cell__ft"></div>
                     </div>
                     <div class="weui-cell">
-                        <div class="weui-cell__bd">聊天背景</div>
-                        <div class="weui-cell__ft"></div>
+                        <!-- <div class="weui-cell__bd">聊天背景</div> -->
+                        <!-- <div class="weui-cell__ft"></div> -->
                     </div>
                     <div class="weui-cell">
                         <div class="weui-cell__bd">我的表情</div>

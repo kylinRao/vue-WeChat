@@ -5,7 +5,7 @@ Vue.use(Router)
     //app整体由店面页和店内页组成 暂时并没有用到嵌套路由
 const routes = [{
         path: '/',
-        name: "微信",
+        name: "全部对话",//从单个对话返回时，这个字段展示在页面上，原本是叫做微信，我这里改成了全部对话
         component: resolve => require(["../components/wechat/wechat.vue"], resolve)
     }, {
         path: '/wechat/dialogue',

@@ -7,23 +7,24 @@
             </div>
             <div class="center">
                 <router-link to="/" tag="div" class="iconfont icon-return-arrow">
-                    <span>微信</span>
+                    <span>返回</span>
                 </router-link>
                 <span>{{pageName}}</span>
                 <span class="parentheses" v-show='$route.query.group_num&&$route.query.group_num!=1'>{{$route.query.group_num}}</span>
             </div>
         </header>
-        <section class="dialogue-section clearfix" v-on:click="MenuOutsideClick">
-            <div class="row clearfix" v-for="item in msgInfo.msg">
-                <img :src="item.headerUrl" class="header">
-                <p class="text" v-more>{{item.text}}</p>
+        <section id='msgbox' class="dialogue-section clearfix" v-on:click="MenuOutsideClick">
+            <div   class="row clearfix" v-for="item in msgInfo.msg">
+                <img :src="$store.getters.get_user_info(item.name).headerUrl" class="header">
+                <p class="text" v-more>{{item.content}}</p>
             </div>
             <span class="msg-more" id="msg-more"><ul>
                     <li>复制</li>
                     <li>转发</li>
                     <li>收藏</li>
                     <li>删除</li>
-                </ul></span>
+                </ul>
+                </span>
         </section>
         <footer class="dialogue-footer">
             <div class="component-dialogue-bar-person">
@@ -68,14 +69,72 @@
     </div>
 </template>
 <script>
+    import contact from '../../vuex/contacts' //存放所有联系人的数据
     export default {
         data() {
+        
             return {
                 pageName: this.$route.query.name,
                 currentChatWay: true, //ture为键盘打字 false为语音输入
                 timer: null
                     // sayActive: false // false 键盘打字 true 语音输入
             }
+        },
+        created(){
+
+        },
+        mounted(){
+            if (this.$store.state.is_opened_array.includes(this.$route.query.mid.toString()) ){
+                console.log("当前会话已与服务器建立长连接")
+            }else{
+                console.log("新建当前会话的长连接")
+                var host_port = '101.206.211.127:8000'  //当前后端使用不同的服务器时，需要手动修改对接地址
+            var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+            var chatsock = new this.ReconnectingWebSocket(ws_scheme + '://' + host_port + "/chat/stream" +'/'+ this.$route.query.mid+'/' );
+            this.$store.commit('add_opened_ws',this.$route.query.mid.toString())
+            var _this = this
+            console.log(_this.$store.state.msgList.baseMsg)
+            console.log("连接新建成功")
+            chatsock.onmessage = this.getMessageInfo;
+        // chatsock.onmessage = function(message) {
+        //     var data = JSON.parse(message.data);
+        //     console.log("收到ws消息")
+        //     console.log(data)
+        //     console.log(_this)
+        //     var chat = $("#chat")
+        //     var ele = $('<tr></tr>')
+        //     var msg_type = data.msg_type
+            
+        //         if (msg_type===0){
+        //             console.log("更新聊天内容")
+        //             console.log(_this.$store.state.msgList)
+        //             var tmp_baseMsg = _this.$store.state.msgList.baseMsg
+        //             for(var i = 0; i < tmp_baseMsg.length; i++){
+        //                 if (tmp_baseMsg[i] === _this.$route.query.mid ){
+        //                     tmp_baseMsg[i].msgList.concat([data])
+        //                     _this.$store.commit("update_rooms",tmp_baseMsg)
+        //                     console.log(_this.$store.state.msgList.baseMsg)
+        //                     break;
+        //                 }
+        //             }
+
+
+        //             ele.append(
+        //             $("<td></td>").text(data.username)
+        //         )
+        //         ele.append(
+        //             $("<td></td>").text(data.handle)
+        //         )
+        //         ele.append(
+        //             $("<td></td>").text(data.message)
+        //         )
+
+        //         chat.append(ele)
+        //         }
+
+        // };
+            }
+            
         },
         beforeRouteEnter(to, from, next) {
             next(vm => {
@@ -196,7 +255,38 @@
                     msgMore.style.display = 'none'
                     container.forEach(item=>item.style.backgroundColor='#fff')
                 }
-            }
+            },
+            getMessageInfo({ data }){
+            let msg = JSON.parse(data)  //后端返回的是json数据,需要转换
+        switch (msg.msg_type) {
+          case 0:
+            console.log(this.$store)
+            console.log("更新聊天内容")
+                    console.log(this.$store.state.msgList)
+                    var tmp_baseMsg = this.$store.state.msgList.baseMsg
+                    for(var i = 0; i < tmp_baseMsg.length; i++){
+                        console.log(tmp_baseMsg[i].mid)
+                        console.log(this.$route.query.mid)
+                        if (tmp_baseMsg[i].mid == this.$route.query.mid ){
+                          
+                            tmp_baseMsg[i].msg = tmp_baseMsg[i].msg.concat([msg])
+                        
+                            this.$store.commit("update_rooms",tmp_baseMsg)
+                            var div = document.getElementById('msgbox');
+                             div.scrollTop = div.scrollHeight;
+                             console.log("新增一个对话内容")
+                      
+                            break;
+                        }}
+            
+            break
+          case '222':
+            this.$store.commit('socket/UPDATE_COUNTUNREAD', msg.data)
+            break
+    
+        }
+        },
+            
         }
     }
 </script>
